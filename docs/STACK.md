@@ -1,25 +1,24 @@
-# STACK TÉCNICO
+# Stack técnico · 0.2.0
 
-| Área | Objetivo | Estado MVP |
-|---|---|---|
-| Frontend | React + TypeScript + Vite | Código implementado |
-| Estilos | Tailwind CSS + shadcn/ui | **No incluidos**; MVP usa CSS propio |
-| PWA | vite-plugin-pwa + Workbox | Configurado, requiere compilación/prueba |
-| Iconos | Lucide React | Implementado |
-| Estado | Zustand | **No incluido**; hooks React por simplicidad |
-| Rutas | React Router | **No incluido**; navegación local por estado |
-| Validación | Zod | **No incluido**; comprobaciones básicas en frontend/backend |
-| Captura | Input HTML `capture=environment` | Implementado, depende del navegador |
-| Edición imagen | Canvas API + OpenCV.js | Solo Canvas + recorte rectangular y giro; OpenCV.js pendiente |
-| Auth | Firebase Authentication | Integrado, requiere configuración |
-| Datos | Cloud Firestore | Integrado, requiere configuración |
-| Imágenes | Cloud Storage | NO usado por MVP; reglas deniegan acceso |
-| IA | OpenAI Responses API `gpt-4.1-mini` | Cloud Function incluida, pendiente despliegue y prueba real |
-| Backend | Firebase Functions v2 Node.js 22 | Código fuente incluido |
-| Hosting | Firebase Hosting | Configurado, pendiente despliegue |
-| Pruebas | Vitest | Pruebas básicas de filtro incluidas |
-| E2E | Playwright | Pendiente |
-| CI | GitHub Actions | Flujo de compilación y test incluido |
-| Control | Git + GitHub | Repositorio listo para inicializar |
+| Área | Implementación |
+|---|---|
+| Runtime | Node.js 22; npm con lockfiles raíz y Functions |
+| Frontend | React 19, TypeScript 5.9, Vite 8 |
+| Estilos | CSS propio responsive; Lucide React |
+| Estado/navegación | Hooks React y navegación local por estado |
+| Sesión | Firebase Authentication y SessionGate con propietario único |
+| Datos | Firestore con caché en memoria y reglas validadas |
+| Captura | Input de archivos/cámara; JPG, PNG y WebP |
+| Ajustes de imagen | Canvas; recorte y giro independientes por página |
+| IA | OpenAI Responses API, gpt-4.1-mini, JSON Schema |
+| Backend | Firebase Functions v2, Node.js 22, Admin SDK |
+| Protección | App Check Enterprise, UID, cuotas Firestore y validación de entradas |
+| Hosting/PWA | Firebase Hosting, vite-plugin-pwa 2, Workbox |
+| Pruebas | Vitest 5, Testing Library, node:test y Rules Unit Testing |
+| Navegador | Playwright; Chromium escritorio y emulación Pixel 7 |
+| CI/CD | GitHub Actions: validación por push/PR y despliegue manual |
+| Formato | Prettier |
 
-**Criterio:** no confundir tecnologías propuestas con tecnologías ya integradas. Algunas se posponen deliberadamente para reducir dependencias del MVP.
+Firebase web se fija en 12.12.0, compatible con Node 22. La dependencia transitiva `@grpc/grpc-js` se fuerza a la rama corregida 1.14.6 o superior mediante `overrides`; los lockfiles registran las versiones efectivas. No se aplicó el downgrade de Firebase sugerido automáticamente por la auditoría.
+
+No se utilizan Tailwind, shadcn/ui, Zustand, React Router, Zod ni OpenCV. Storage está configurado con acceso denegado y no almacena fotografías. Las versiones exactas se consultan en los archivos de bloqueo; los servicios reales siguen requiriendo configuración y verificación de despliegue.

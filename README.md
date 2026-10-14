@@ -1,79 +1,64 @@
-# SongScan MVP · PWA de letras sin acordes
+# SongScan · PWA privada para digitalizar canciones
 
-Aplicación React + TypeScript + Vite, PWA instalable, con captura/importación de imágenes, recorte rectangular, IA con visión a través de Firebase Cloud Functions, editor de letras y biblioteca privada en Cloud Firestore.
+Versión 0.2.0. React + TypeScript + Vite, Firebase Authentication/Firestore/Functions y OpenAI Responses API. Fotografía hasta tres páginas, recorta y gira cada una, transcribe sin acordes, revisa y guarda la letra en una biblioteca privada.
 
-> **Estado:** MVP inicial de código fuente. No es un producto terminado ni se ha desplegado. Para usar la nube y la IA es obligatorio configurar Firebase, autorizar un único UID y registrar la clave de OpenAI. Sin configuración ejecuta una **demo temporal** que NO guarda datos ni utiliza IA. La instalación de dependencias y la compilación no pudieron verificarse en el entorno donde se generó este paquete (conectividad npm insuficiente); ejecuta las verificaciones indicadas.
+El código compila y dispone de pruebas automatizadas de sesión, backend, permisos y navegador. El despliegue real requiere un proyecto Firebase y su configuración. Sin variables Firebase funciona una demo en memoria: sus canciones se pierden al recargar y no hay IA.
 
 ## Requisitos
-- Windows 10/11, PowerShell 7 o terminal compatible
-- Node.js 22 LTS y npm
-- Firebase CLI: `npm install -g firebase-tools`
-- Cuenta Firebase con proyecto preparado (el despliegue de Cloud Functions puede requerir el plan Blaze)
-- Cuenta de OpenAI con API activada y facturación aplicable
 
-## 1. Iniciar la demostración (sin nube)
+- Node.js 22 (22.14 o superior dentro de la rama 22) y npm.
+- Firebase CLI 15.5.1: `npm install --global firebase-tools@15.5.1`.
+- Java 21 para las pruebas de reglas.
+- Para producción: Firebase con facturación habilitada para Functions, propietario autorizado y secreto OpenAI en Secret Manager.
+
+## Instalar y comprobar
+
 ```powershell
-cd songscan-mvp
-npm install
+npm ci
+npm ci --prefix functions
+npm run check
+npm run test:rules
+npx playwright install chromium
+npm run test:e2e
+```
+
+`npm run check` ejecuta pruebas de frontend/configuración, build PWA y pruebas/compilación del backend. Las pruebas de navegador usan el build de `dist`; ejecuta `npm run build` antes de ellas. `npm audit` y `npm audit --prefix functions` revisan las dependencias de cada paquete.
+
+## Explorar la demo
+
+```powershell
 npm run dev
 ```
-Abre la URL que muestre Vite. La demo permite capturar o cargar fotografías, hacer recortes rectangulares, escribir letras, crear una biblioteca en RAM, editar/buscar/favoritos y exportar TXT. **Al recargar se pierde el contenido.** No representa sincronización en la nube.
 
-## 2. Configurar Firebase para uso real
-1. En [Firebase Console](https://console.firebase.google.com/), crea un proyecto.
-2. Agrega una aplicación Web y copia su configuración pública.
-3. Activa Authentication: proveedor correo/contraseña y/o Google.
-4. Crea manualmente la cuenta del propietario en Authentication, o inicia sesión con Google y toma su UID desde la consola. No hay registro público en la app.
-5. Habilita Cloud Firestore. Asegúrate de elegir una ubicación adecuada.
-6. Crea `.env` copiando `.env.example` y rellena las variables `VITE_FIREBASE_*`.
-7. **Antes de desplegar** reemplaza `REEMPLAZAR_OWNER_UID` en `firestore.rules` por el UID exacto del propietario. No publiques las reglas sin corregirlas. Este UID no debe compartirse con usuarios no autorizados.
-8. Selecciona el proyecto: `firebase login` y `firebase use --add` (o crea `.firebaserc` localmente).
-9. Desde la raíz del proyecto, despliega reglas: `firebase deploy --only firestore:rules,firestore:indexes,storage`.
-10. Configura el secreto para el backend: `firebase functions:secrets:set OPENAI_API_KEY` y pega la clave únicamente en la consola solicitada.
-11. El backend usa el parámetro `OWNER_UID` definido en `functions/src/index.ts`: al desplegar Functions, Firebase CLI pedirá su valor. Introduce el mismo UID autorizado. Es posible definirlo también en `functions/.env.<PROJECT_ID>` con `OWNER_UID=...` (archivo sensible que no debes subir).
-12. Instala dependencias y compila Functions:
+Abre la dirección local que muestre Vite. Incluye biblioteca, editor, favoritos, búsqueda, exportación TXT y preparación de imágenes. La IA requiere Firebase real.
+
+## Desplegar
+
+Sigue [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) para configurar Firebase, Authentication, App Check y el secreto de OpenAI. Copia `.env.example` a `.env.production.local` y completa las variables públicas, incluido `VITE_OWNER_UID`.
+
 ```powershell
-cd functions
-npm install
-npm run build
-cd ..
+firebase login --reauth
+npm run build:production
+npm run deploy
 ```
-13. Despliega función: `firebase deploy --only functions:processSong`.
-14. Compila frontend: `npm run build`.
-15. Despliega PWA: `firebase deploy --only hosting`.
-16. En Firebase Authentication añade el dominio de Hosting a *Authorized domains* si fuera necesario.
 
-**Importante:** el inicio de sesión puede funcionar aunque `processSong` aún no se haya desplegado; en ese caso la lectura de imágenes con IA fallará, y la edición manual seguirá disponible. Se recomienda probar primero en un proyecto de Firebase separado de producción.
+El despliegue valida las variables, utiliza el Project ID configurado, genera reglas privadas para ese propietario y sincroniza `OWNER_UID` con Functions. Los hooks recompilan antes de publicar. Si falta configuración, se detiene; el build de demo se reserva para desarrollo y pruebas.
 
-## 3. Probar calidad
-```powershell
-npm test
-npm run build
-cd functions
-npm run build
-```
-Si TypeScript o dependencias informan incompatibilidades, resuélvelas y ejecuta nuevamente todas las pruebas antes de desplegar.
+También se incluye un workflow manual **Desplegar Firebase**, configurable con variables y una credencial del entorno GitHub `production`.
 
-## 4. Flujo de uso
-1. Inicia sesión (solo modo Firebase).
-2. Ve a **Escanear** y toma o importa imágenes (hasta tres páginas en MVP).
-3. Selecciona una página y delimita un rectángulo arrastrando sobre la vista previa. Puedes restaurar la selección y rotar la página seleccionada.
-4. Pulsa **Preparar imagen** para observar el recorte. En MVP solo se conserva el recorte/rotación de la página actualmente seleccionada; las otras páginas se procesan completas. Para recortar todas individualmente hay que completar el editor multipágina.
-5. Pulsa **Extraer letra con IA**. Se enviarán las fotografías como imágenes JPEG preparadas en una llamada autenticada al backend.
-6. Revisa título, letra y advertencias, corrige y **Guardar canción**.
-7. En la biblioteca usa búsqueda, favoritos, edición, borrado y exportación TXT.
+## Seguridad y límites
 
-## 5. Seguridad y limitaciones
-- No coloques `OPENAI_API_KEY` en `.env` de Vite ni en el navegador.
-- La función exige Firebase Auth y compara UID con `OWNER_UID`; las reglas de Firestore requieren el UID exacto.
-- La biblioteca de producción usa Firestore con caché en memoria (sin persistencia offline deliberada).
-- `storage.rules` deniega todo: MVP transmite imágenes pequeñas a callable Functions y no almacena fotos permanentemente. Esto difiere del flujo de subida temporal de la arquitectura objetivo.
-- El servicio `processSong` acepta 1–3 imágenes JPEG con máximo ~2.8MB en base64 por imagen; el total puede superar límites de la infraestructura; utiliza fotos recortadas. No hay todavía colas ni limitación de cuotas por usuario.
-- No se ha activado App Check en el callable (`enforceAppCheck:false`). Debe activarse y probarse antes de exponer a uso público.
-- La eliminación de acordes usa primordialmente IA. El botón adicional aplica un filtro heurístico conservador; no garantiza identificar acordes intercalados.
-- Recorte actual: rectangular por arrastre, **no** corrección de perspectiva de cuatro puntos.
-- No hay guardado de borradores offline, importación PDF, historial de cambios, conflictos de edición con interfaz de resolución ni detección de duplicados.
-- No almacena la biblioteca en disco; la demo usa RAM. Las imágenes se mantienen en RAM durante la sesión y pueden pasar por el procesamiento interno del navegador.
-- No se recomienda cargar material con restricciones de copyright sin autorización.
+- Un único UID autorizado en interfaz, reglas y backend; el estado privado se desmonta al cerrar sesión.
+- Letras y fotografías en memoria; Firestore utiliza caché en memoria. Firebase Auth administra su propia persistencia de sesión.
+- App Check obligatorio en la función callable, con reCAPTCHA Enterprise en el navegador.
+- Máximo tres JPEG, 2.8 millones de caracteres por imagen y 6 millones en conjunto al llamar al backend.
+- Cuota transaccional: 10 intentos por hora UTC, 30 por día UTC y diez segundos entre solicitudes. Los intentos fallidos posteriores a reservar cuota también cuentan.
+- La clave OpenAI se almacena exclusivamente como secreto de Functions. La solicitud usa `store: false`; esto no sustituye las políticas de retención del proveedor.
+- Storage no almacena imágenes; sus reglas deniegan todo. No se despliega por defecto porque el MVP no necesita un bucket.
+- Las actualizaciones PWA solicitan confirmación para poder guardar antes de recargar.
 
-Consulta `/docs` para el brief completo, stack, arquitectura, roadmap y avance verificado.
+## Alcance pendiente
+
+Corrección de perspectiva, reordenación de páginas, duplicados, historial y respaldos completos. Las pruebas E2E actuales cubren demo y preparación de imágenes; la transcripción real y sincronización entre dispositivos deben validarse después del primer despliegue.
+
+Consulta [PROGRESS](docs/PROGRESS.md), [ROADMAP](docs/ROADMAP.md), [ARCHITECTURE](docs/ARCHITECTURE.md), [STACK](docs/STACK.md) y [BRIEF](docs/BRIEF.md).

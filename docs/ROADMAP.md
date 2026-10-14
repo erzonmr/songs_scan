@@ -1,21 +1,32 @@
-# ROADMAP SIN ESTIMACIONES DE TIEMPO
+# Roadmap
 
-- [x] Fase 1. Estructura Vite/React/TypeScript, PWA y diseño inicial con CSS propio.
-- [~] Fase 2. Autenticación Firebase y reglas para UID único. **Código incluido; integración de proyecto real pendiente.**
-- [~] Fase 3. Captura de cámara/galería y selección de hasta 3 imágenes. **Falta reordenar/reemplazar con interfaz dedicada.**
-- [~] Fase 4. Recorte de imágenes. **Rectangular y giro implementados; pendiente perspectiva 4 esquinas y guardar ajustes independientes de cada página.**
-- [~] Fase 5. IA con visión. **Cloud Function y contrato JSON incluidos; falta despliegue, ensayos y control de consumo.**
-- [x] Fase 6. Editor manual de título, letra y categoría, exportación TXT, advertencias IA.
-- [~] Fase 7. Biblioteca Firestore y favoritos/búsqueda. **Pendientes detección de duplicados, etiquetas y respaldos.**
-- [~] Fase 8. Sync con `onSnapshot` y control de versiones. **Pendiente UX de resolución de conflictos.**
-- [~] Fase 9. Pruebas. **Vitest básico escrito; sin E2E ni prueba de campo.**
-- [~] Fase 10. Hosting, CI/CD y documentación. **Archivos de configuración incluidos; despliegue sin ejecutar.**
+## Base preparada para despliegue · 0.2.0
 
-## Siguientes prioridades recomendadas
-1. Resolver e instalar dependencias localmente, ejecutar tests y build.
-2. Crear Firebase, autenticación y UID único, verificar reglas.
-3. Desplegar y probar IA con páginas reales de cancionero.
-4. Editor multipágina con recorte individual y perspectiva cuatro puntos.
-5. Subida temporal cifrada/privada a Cloud Storage para archivos grandes.
-6. App Check, cuotas operativas, pruebas automatizadas y robustez.
-7. Duplicados, búsqueda escalable, recuperación y backups.
+- [x] React/TypeScript/Vite y PWA compilables.
+- [x] Biblioteca, editor, búsqueda, favoritos y exportación TXT.
+- [x] Captura/importación de tres páginas con recorte y giro independientes.
+- [x] Integración Auth/Firestore/Functions y propietario único.
+- [x] Validación de datos y control de versiones.
+- [x] App Check y cuotas persistentes de IA.
+- [x] Pruebas de sesión, backend, permisos y navegador.
+- [x] Lockfiles, auditorías, CI y despliegue manual documentado.
+
+## Primer despliegue real
+
+- [ ] Confirmar proyecto Firebase, propietario y configuración web.
+- [ ] Habilitar servicios/facturación, reCAPTCHA Enterprise y secreto OpenAI.
+- [ ] Renovar sesión CLI y ejecutar ensayo/despliegue.
+- [ ] Validar transcripción con canciones reales, ilegibles y varias páginas.
+- [ ] Validar biblioteca entre dispositivos y conflictos de edición.
+- [ ] Verificar instalación/cámara en Android y Safari iOS.
+- [ ] Activar enforcement App Check de Firestore tras observar solicitudes válidas y configurar alertas de gasto.
+
+## Mejoras posteriores
+
+- [ ] Perspectiva de cuatro esquinas, brillo y contraste.
+- [ ] Reordenar/reemplazar páginas y comparar todas las referencias en el editor.
+- [ ] Duplicados, historial y exportación/restauración de biblioteca completa.
+- [ ] Resolución guiada de conflictos y búsquedas para bibliotecas grandes.
+- [ ] Storage temporal y trabajos asíncronos si aumenta el tamaño o volumen de documentos.
+
+La aceptación en producción depende de las pruebas reales; los checks locales no certifican la precisión de la transcripción IA.

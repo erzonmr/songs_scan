@@ -1,5 +1,5 @@
 # BRIEF FUNCIONAL · SongScan
-**Versión del documento:** 1.0 · **Versión del código:** 0.1.0 MVP
+**Versión del documento:** 1.1 · **Versión del código:** 0.2.0
 
 ## Visión
 PWA instalable para digitalizar canciones de cancioneros físicos, eliminar automáticamente los acordes usando IA con visión, revisar el texto y guardarlo en una biblioteca privada sincronizada en la nube.

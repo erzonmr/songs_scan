@@ -1,44 +1,43 @@
-# ARQUITECTURA
+# Arquitectura · 0.2.0
 
 ```mermaid
 flowchart TD
-  A[Usuario PWA] --> B[React UI]
-  B --> C[Canvas: recorte y giro]
-  B --> D[Firebase Authentication]
-  B --> E[Firestore: users/UID/songs]
-  C --> F[Callable processSong]
-  D --> F
-  F --> G[Verificación UID único]
-  G --> H[OpenAI Responses API con visión]
-  H --> F
-  F --> I[Editor de letra]
-  I --> E
-  E --> B
+  A[PWA React] --> B[SessionGate: propietario autorizado]
+  B --> C[Biblioteca y editor]
+  B --> D[Captura: hasta tres páginas]
+  D --> E[Recorte y giro por página / JPEG Canvas]
+  E --> F[Callable processSong]
+  G[Firebase Auth y App Check] --> F
+  F --> H[UID / imágenes / cuota transaccional]
+  H --> I[OpenAI Responses: visión y JSON Schema]
+  I --> J[Validación de respuesta completa]
+  J --> C
+  C --> K[Firestore users/UID/songs]
+  K --> C
 ```
 
-## Modelo de datos implementado
-Ruta: `users/{uid}/songs/{songId}`.
-Campos: `title`, `content`, `category`, `favorite`, `createdAt`, `updatedAt`, `version`. La biblioteca extrae `Song.id` del ID del documento. El listado filtra en memoria la sesión actual del propietario y se actualiza con `onSnapshot`.
+## Sesión y datos
 
-## Procesamiento real del MVP
-- Cámara/galería -> Data URL temporal en RAM -> recorte rectangular + JPEG Canvas -> callable `processSong` (JSON con imágenes base64) -> Responses API -> JSON `{title,content,warnings}` -> editor -> `setDoc` Firestore.
-- Los originales **no** se suben a Cloud Storage y **no** existe actualmente un sistema de trabajos con cola/reintentos persistentes.
-- Cada intento invoca IA una sola vez. Claves secretas en Firebase Secret Manager mediante `defineSecret`.
-- La función usa `defineString('OWNER_UID')` para un único propietario y un límite de 3 imágenes.
-- El frontend guarda con transacciones y comprueba `version` al actualizar; otros cambios desde un segundo dispositivo ocasionan error que requiere reabrir la canción.
+`SessionGate` verifica la sesión y el UID configurado antes de montar el espacio privado. Al cerrar o cambiar sesión, React desmonta su estado, incluidas letras y fotografías. Firestore mantiene caché en memoria; Firebase Auth administra sus propios datos de sesión.
 
-## Modelo futuro recomendado
-- Storage temporal con TTL, funciones asíncronas, protección App Check obligatoria, cuotas de IA, registros técnicos sin contenido sensible.
-- Persistir `processingJobs/{jobId}`, versiones y advertencias; mantener un contrato JSON estricto y verificación de calidad.
-- Editor de perspectiva en cuatro puntos y correcciones por página sin sobrescribir el trabajo en páginas anteriores.
-- Índices para búsqueda de contenido extensa, revisiones y backups automatizados.
+Las canciones se guardan en `users/{uid}/songs/{songId}` con `title`, `content`, `favorite`, `category`, `createdAt`, `updatedAt` y `version`. Las reglas validan tipos, límites, timestamps de servidor y aumento de versión. Edición y favoritos usan transacciones; los conflictos de edición requieren reabrir la canción.
 
-## Privacidad
-El navegador no persiste deliberadamente letras o fotografías de usuario. `memoryLocalCache()` de Firestore es explícito; service worker solo precachea archivos de aplicación. El navegador o sistema podrían generar cachés temporales propias. La demo es memoria volátil.
+## Transcripción
 
-## Riesgos
-1. Fotografía pequeña o borrosa: error IA; revisión siempre necesaria.
-2. Backend callable: límites de tamaño; pasar a Storage temporal en próxima iteración.
-3. PWA instalada en iOS: permisos e instalación dependen de Safari.
-4. Acceso indebido: reglas y OWNER_UID deben configurarse correctamente y probarse.
-5. Gastos IA: cuotas por implementar; no habilitar para múltiples cuentas.
+Las imágenes permanecen en RAM y cada página conserva su recorte/rotación. Canvas limita la dimensión mayor a 1600 px y produce JPEG. La función verifica uno a tres JPEG, tamaño por imagen y total, Auth, UID y App Check.
+
+Antes de llamar a IA reserva cuota mediante una transacción Admin SDK en `internalUsage/{uid}`: diez intentos por hora UTC, treinta por día UTC y diez segundos entre intentos. Los clientes no tienen acceso a esos documentos. La reserva también cuenta si falla posteriormente la API; así no se pueden generar reintentos ilimitados.
+
+OpenAI recibe una solicitud de visión con JSON Schema, `store: false`, límite de tokens y timeout de 90 segundos. Se comprueban respuestas completas, negativas, JSON y tipos antes de devolver `{title, content, warnings}`. No se registra material de usuario ni claves en los errores. El usuario revisa y guarda la transcripción.
+
+## Despliegue
+
+`prepare-deploy.mjs` carga la configuración de producción y genera `.firebase/firestore.rules` desde la plantilla, además de sincronizar `OWNER_UID` en el entorno de Functions del proyecto. El frontend usa el mismo `VITE_OWNER_UID`. Se rechazan configuración incompleta, región incorrecta y proyecto CLI incoherente.
+
+Hosting recompila producción en su hook; Functions recompila TypeScript; Firestore prepara las reglas antes de publicar. `npm run deploy` fija el proyecto explícitamente. Storage tiene configuración y reglas de denegación, pero no forma parte del despliegue habitual.
+
+## PWA y verificación
+
+El service worker precachea recursos de aplicación, sin caché runtime de canciones, API o imágenes. Las nuevas versiones muestran un aviso para guardar antes de recargar.
+
+CI ejecuta unitarias/configuración, backend, builds, auditorías, reglas emuladas y E2E Chromium. El flujo Firebase→OpenAI real depende de credenciales y se valida después del primer despliegue, según `DEPLOYMENT.md`.

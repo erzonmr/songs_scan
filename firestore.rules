@@ -1,12 +1,22 @@
 rules_version = '2';
 service cloud.firestore {
  match /databases/{database}/documents {
-  // REEMPLAZAR con el UID Firebase del propietario antes de desplegar.
-  function owner() { return request.auth != null && request.auth.uid == 'REEMPLAZAR_OWNER_UID'; }
+  // Plantilla cerrada por defecto; prepare-deploy genera las reglas con el UID real.
+  function owner() { return request.auth != null && request.auth.uid == '__OWNER_UID__'; }
+  function validSong() {
+   let data = request.resource.data;
+   return data.keys().hasAll(['title','content','favorite','category','createdAt','updatedAt','version'])
+    && data.keys().hasOnly(['title','content','favorite','category','createdAt','updatedAt','version'])
+    && data.title is string && data.title.size() > 0 && data.title.size() <= 250
+    && data.content is string && data.content.size() > 0 && data.content.size() <= 60000
+    && data.category is string && data.category.size() <= 100
+    && data.favorite is bool && data.version is int && data.version > 0
+    && data.createdAt is timestamp && data.updatedAt == request.time;
+  }
   match /users/{uid}/songs/{songId} {
    allow read, delete: if owner() && request.auth.uid == uid;
-   allow create: if owner() && request.auth.uid == uid && request.resource.data.keys().hasOnly(['title','content','favorite','category','createdAt','updatedAt','version']) && request.resource.data.version == 1 && request.resource.data.title is string && request.resource.data.content is string;
-   allow update: if owner() && request.auth.uid == uid && request.resource.data.keys().hasOnly(['title','content','favorite','category','createdAt','updatedAt','version']) && request.resource.data.version == resource.data.version + 1 && request.resource.data.createdAt == resource.data.createdAt;
+   allow create: if owner() && request.auth.uid == uid && validSong() && request.resource.data.version == 1 && request.resource.data.createdAt == request.time;
+   allow update: if owner() && request.auth.uid == uid && validSong() && request.resource.data.version == resource.data.version + 1 && request.resource.data.createdAt == resource.data.createdAt;
   }
   match /{document=**} { allow read, write: if false; }
  }

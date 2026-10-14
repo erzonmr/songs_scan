@@ -7,3 +7,7 @@ dist/
 functions/lib/
 *.log
 .DS_Store
+playwright-report/
+test-results/
+.firebaserc
+gha-creds-*.json
