@@ -34,7 +34,7 @@ Abre la dirección local que muestre Vite. Incluye biblioteca, editor, favoritos
 
 ## Desplegar
 
-Sigue [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) para configurar Firebase, Authentication, App Check y el secreto de OpenAI. Copia `.env.example` a `.env.production.local` y completa las variables públicas, incluido `VITE_OWNER_UID`.
+El proyecto nuevo es `songscan-erzonmr`; su estado está en [FIREBASE_SETUP](docs/FIREBASE_SETUP.md). Sigue [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) para configurar Firebase, Authentication, App Check y el secreto de OpenAI. Copia `.env.example` a `.env.production.local` y completa las variables públicas, incluido `VITE_OWNER_UID`.
 
 ```powershell
 firebase login --reauth

@@ -13,9 +13,12 @@
 
 ## Primer despliegue real
 
-- [ ] Confirmar proyecto Firebase, propietario y configuración web.
+- [x] Crear proyecto Firebase separado, registrar aplicación web y obtener configuración.
+- [x] Crear Firestore y desplegar reglas iniciales cerradas; configurar App Check Enterprise.
+- [ ] Confirmar propietario y completar su UID.
 - [ ] Habilitar servicios/facturación, reCAPTCHA Enterprise y secreto OpenAI.
-- [ ] Renovar sesión CLI y ejecutar ensayo/despliegue.
+- [x] Renovar sesión CLI y comprobar creación/despliegue de recursos.
+- [ ] Ejecutar ensayo y despliegue final de Functions/Hosting.
 - [ ] Validar transcripción con canciones reales, ilegibles y varias páginas.
 - [ ] Validar biblioteca entre dispositivos y conflictos de edición.
 - [ ] Verificar instalación/cámara en Android y Safari iOS.

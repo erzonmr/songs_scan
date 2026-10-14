@@ -1,6 +1,6 @@
 # Avance verificado · 2026-10-13
 
-Versión 0.2.0. Código preparado para despliegue Firebase, con builds y verificaciones locales exitosas. La publicación y las pruebas contra servicios reales siguen pendientes de configurar el proyecto y renovar la autenticación CLI.
+Versión 0.2.0. Código preparado para despliegue Firebase, con builds y verificaciones locales exitosas. El proyecto Firebase nuevo está creado y preparado parcialmente; la publicación y las pruebas del flujo real siguen pendientes de completar facturación, propietario y secreto IA. Consulta `FIREBASE_SETUP.md`.
 
 ## Verificado localmente
 
@@ -29,8 +29,8 @@ Las pruebas del contrato IA usan respuestas controladas y no consumen la API Ope
 
 ## Pendiente del entorno real
 
-- Project ID y configuración web Firebase, UID del propietario y clave pública App Check.
-- Renovar `firebase login --reauth`; la sesión local encontrada devolvió 401 al listar proyectos.
+- Confirmar propietario/UID y elegir la cuenta de facturación. Project ID, aplicación web, Firestore y App Check ya están preparados.
+- Sesión CLI renovada y comprobada; las reglas iniciales de Firestore ya se desplegaron con acceso denegado.
 - Secreto OpenAI en Secret Manager, facturación y servicios Firebase habilitados.
 - Primer despliegue HTTPS, escaneos reales y sincronización entre dispositivos.
 - Instalación y cámara física en Android/iOS; validación de Safari.
