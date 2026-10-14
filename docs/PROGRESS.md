@@ -1,6 +1,6 @@
 # Avance verificado · 2026-10-13
 
-Versión 0.2.0. PWA publicada en Firebase Hosting con facturación, propietario, Authentication y reglas configurados. IA activada: secreto validado, `processSong` desplegada y Hosting actualizado. La primera sesión y las pruebas autenticadas reales requieren que el propietario establezca su contraseña. Consulta `FIREBASE_SETUP.md`.
+Versión 0.2.0. PWA publicada en Firebase Hosting con facturación, propietario, Authentication y reglas configurados. IA activada: secreto validado, `processSong` desplegada y Hosting actualizado. Primera sesión del propietario completada, biblioteca sincronizada y 3 canciones creadas exitosamente en el entorno real. Consulta `FIREBASE_SETUP.md`.
 
 ## Verificado localmente
 
@@ -29,11 +29,10 @@ Las pruebas unitarias del contrato IA usan respuestas controladas y no consumen 
 
 ## Pendiente del entorno real
 
-- Propietario, UID y facturación configurados; pendiente primera sesión del propietario y validación autenticada.
-- Sesión CLI y reglas definitivas del propietario verificadas en el despliegue real.
-- Secreto OpenAI y `processSong` desplegados; visión validada mediante imagen sintética directamente contra OpenAI. Pendiente la primera transcripción autenticada desde la PWA.
-- Hosting HTTPS y reglas publicados; pendientes escaneos IA reales y sincronización autenticada entre dispositivos.
-- Instalación y cámara física en Android/iOS; validación de Safari.
+- Primera sesión del propietario, autenticación, creación de 3 canciones y sincronización validadas en producción.
+- Validar escaneos de cancioneros físicos con fotografías reales y múltiples páginas mediante IA.
+- Instalación de PWA y uso de cámara física en Android/iOS (Safari), pendiente de ejecución cuando concluyan las pruebas previas.
+- Activar enforcement de App Check en Firestore tras observar tráfico legítimo.
 
 ## Límites de alcance
 

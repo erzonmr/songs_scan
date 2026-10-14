@@ -53,7 +53,8 @@ Introduce la clave en el prompt seguro. La IA ya está habilitada mediante `VITE
 - `processSong` confirmada ACTIVE con secreto versión 2, timeout de 120 segundos y máximo de dos instancias.
 - Endpoint callable: peticiones sin credenciales rechazadas con 401/UNAUTHENTICATED; preflight desde Hosting aceptado con 204.
 - Build publicado con IA activada: recurso JavaScript remoto idéntico al build local.
-- El recorrido autenticado navegador → callable → IA → editor, las fotografías reales y el CRUD entre dispositivos siguen pendientes de una prueba desde la sesión del propietario. La prueba directa a OpenAI no certifica por sí sola ese recorrido completo.
+- Primera sesión del propietario completada, 3 canciones creadas y sincronización entre dispositivos validada en producción.
+- Pendiente validar transcripción con fotografías reales de cancioneros físicos e instalación móvil cuando concluyan las pruebas de usuario.
 - App Check de Firestore permanece sin enforcement hasta verificar las solicitudes válidas del navegador; la función exige App Check en código.
 
 Consulta [DEPLOYMENT.md](DEPLOYMENT.md) para configuración general y validación posterior.

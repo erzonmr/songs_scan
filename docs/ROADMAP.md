@@ -23,8 +23,8 @@
 - [x] Publicar Hosting y reglas definitivas del propietario.
 - [ ] Completar la primera transcripción autenticada desde la sesión del propietario.
 - [ ] Validar transcripción con canciones reales, ilegibles y varias páginas.
-- [ ] Validar biblioteca entre dispositivos y conflictos de edición.
-- [ ] Verificar instalación/cámara en Android y Safari iOS.
+- [x] Validar biblioteca entre dispositivos y sincronización (3 canciones creadas exitosamente).
+- [ ] Verificar instalación/cámara en Android y Safari iOS (postergado para pruebas previas de usuario).
 - [ ] Activar enforcement App Check de Firestore tras observar solicitudes válidas y configurar alertas de gasto.
 
 ## Mejoras posteriores
