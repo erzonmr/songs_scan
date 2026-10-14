@@ -1,0 +1,2 @@
+import {describe,it,expect} from 'vitest';import {removeObviousChordLines} from './lyrics';
+describe('filtro conservador de acordes',()=>{it('quita líneas de acordes sin borrar letra',()=>{expect(removeObviousChordLines('G D Em\nDios está aquí\nC/G F#m7\nYo cantaré')).toBe('Dios está aquí\nYo cantaré')});it('preserva texto ordinario',()=>{expect(removeObviousChordLines('A Dios sea la gloria')).toBe('A Dios sea la gloria')})});

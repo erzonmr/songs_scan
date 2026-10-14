@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  // REEMPLAZAR con el UID Firebase del propietario antes de desplegar.
+  function owner() { return request.auth != null && request.auth.uid == 'REEMPLAZAR_OWNER_UID'; }
+  match /users/{uid}/songs/{songId} {
+   allow read, delete: if owner() && request.auth.uid == uid;
+   allow create: if owner() && request.auth.uid == uid && request.resource.data.keys().hasOnly(['title','content','favorite','category','createdAt','updatedAt','version']) && request.resource.data.version == 1 && request.resource.data.title is string && request.resource.data.content is string;
+   allow update: if owner() && request.auth.uid == uid && request.resource.data.keys().hasOnly(['title','content','favorite','category','createdAt','updatedAt','version']) && request.resource.data.version == resource.data.version + 1 && request.resource.data.createdAt == resource.data.createdAt;
+  }
+  match /{document=**} { allow read, write: if false; }
+ }
+}
