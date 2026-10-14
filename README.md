@@ -2,7 +2,7 @@
 
 Versión 0.2.0. React + TypeScript + Vite, Firebase Authentication/Firestore/Functions y OpenAI Responses API. Fotografía hasta tres páginas, recorta y gira cada una, transcribe sin acordes, revisa y guarda la letra en una biblioteca privada.
 
-La PWA está publicada en https://songscan-erzonmr.web.app con biblioteca privada y edición manual. El reconocimiento IA sigue pendiente del secreto OpenAI. El código compila y dispone de pruebas automatizadas de sesión, backend, permisos y navegador. Sin variables Firebase funciona una demo en memoria: sus canciones se pierden al recargar y no hay IA.
+La PWA está publicada en https://songscan-erzonmr.web.app con biblioteca privada, edición manual y reconocimiento IA activado. La función está desplegada y la clave validada; falta validar las primeras fotografías desde la sesión del propietario. El código compila y dispone de pruebas automatizadas de sesión, backend, permisos y navegador. Sin variables Firebase funciona una demo en memoria: sus canciones se pierden al recargar y no hay IA.
 
 ## Requisitos
 
@@ -59,6 +59,6 @@ También se incluye un workflow manual **Desplegar Firebase**, configurable con 
 
 ## Alcance pendiente
 
-Corrección de perspectiva, reordenación de páginas, duplicados, historial y respaldos completos. Las pruebas E2E actuales cubren demo y preparación de imágenes; la transcripción real y sincronización entre dispositivos deben validarse después del primer despliegue.
+Corrección de perspectiva, reordenación de páginas, duplicados, historial y respaldos completos. Las pruebas E2E actuales cubren demo y preparación de imágenes; la transcripción de cancioneros físicos desde la sesión del propietario y la sincronización entre dispositivos siguen pendientes de validación.
 
 Consulta [PROGRESS](docs/PROGRESS.md), [ROADMAP](docs/ROADMAP.md), [ARCHITECTURE](docs/ARCHITECTURE.md), [STACK](docs/STACK.md) y [BRIEF](docs/BRIEF.md).

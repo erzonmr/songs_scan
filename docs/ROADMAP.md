@@ -17,10 +17,11 @@
 - [x] Crear Firestore y desplegar reglas iniciales cerradas; configurar App Check Enterprise.
 - [x] Confirmar propietario, crear su cuenta y configurar su UID.
 - [x] Vincular facturación y habilitar APIs de Functions.
-- [ ] Registrar el secreto OpenAI y desplegar `processSong`.
+- [x] Registrar y validar el secreto OpenAI; desplegar `processSong`.
+- [x] Validar visión con una imagen sintética contra OpenAI y activar el botón en la PWA.
 - [x] Renovar sesión CLI y comprobar creación/despliegue de recursos.
 - [x] Publicar Hosting y reglas definitivas del propietario.
-- [ ] Completar primera sesión del propietario y despliegue de IA.
+- [ ] Completar la primera transcripción autenticada desde la sesión del propietario.
 - [ ] Validar transcripción con canciones reales, ilegibles y varias páginas.
 - [ ] Validar biblioteca entre dispositivos y conflictos de edición.
 - [ ] Verificar instalación/cámara en Android y Safari iOS.

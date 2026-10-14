@@ -1,6 +1,6 @@
 # Avance verificado · 2026-10-13
 
-Versión 0.2.0. PWA publicada en Firebase Hosting con facturación, propietario, Authentication y reglas configurados. La IA sigue pendiente del secreto OpenAI y despliegue de Functions. La primera sesión y las pruebas autenticadas reales requieren que el propietario establezca su contraseña. Consulta `FIREBASE_SETUP.md`.
+Versión 0.2.0. PWA publicada en Firebase Hosting con facturación, propietario, Authentication y reglas configurados. IA activada: secreto validado, `processSong` desplegada y Hosting actualizado. La primera sesión y las pruebas autenticadas reales requieren que el propietario establezca su contraseña. Consulta `FIREBASE_SETUP.md`.
 
 ## Verificado localmente
 
@@ -11,7 +11,7 @@ Versión 0.2.0. PWA publicada en Firebase Hosting con facturación, propietario,
 - Seis pruebas E2E Chromium: biblioteca/exportación, PWA y recorte/giro multipágina en escritorio y viewport móvil.
 - Auditoría npm de raíz y Functions sin vulnerabilidades reportadas con las dependencias fijadas en sus lockfiles.
 
-Las pruebas del contrato IA usan respuestas controladas y no consumen la API OpenAI. Las pruebas de permisos usan un proyecto de demostración emulado y no alteran una base real.
+Las pruebas unitarias del contrato IA usan respuestas controladas y no consumen la API OpenAI. Además, se realizó una prueba de visión con una imagen sintética contra la API real y resultado correcto. Las pruebas de permisos usan un proyecto de demostración emulado y no alteran una base real.
 
 ## Cambios desde 0.1.0
 
@@ -30,8 +30,8 @@ Las pruebas del contrato IA usan respuestas controladas y no consumen la API Ope
 ## Pendiente del entorno real
 
 - Propietario, UID y facturación configurados; pendiente primera sesión del propietario y validación autenticada.
-- Sesión CLI renovada y comprobada; las reglas iniciales de Firestore ya se desplegaron con acceso denegado.
-- Registrar el secreto OpenAI en Secret Manager y desplegar `processSong`; las APIs necesarias ya están habilitadas.
+- Sesión CLI y reglas definitivas del propietario verificadas en el despliegue real.
+- Secreto OpenAI y `processSong` desplegados; visión validada mediante imagen sintética directamente contra OpenAI. Pendiente la primera transcripción autenticada desde la PWA.
 - Hosting HTTPS y reglas publicados; pendientes escaneos IA reales y sincronización autenticada entre dispositivos.
 - Instalación y cámara física en Android/iOS; validación de Safari.
 

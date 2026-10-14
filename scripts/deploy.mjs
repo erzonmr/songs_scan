@@ -13,6 +13,14 @@ const result = spawnSync(
       ? "hosting,firestore"
       : "hosting,firestore,functions:processSong",
   ],
-  { stdio: "inherit", shell: process.platform === "win32" },
+  {
+    stdio: "inherit",
+    shell: process.platform === "win32",
+    env: {
+      ...process.env,
+      FUNCTIONS_DISCOVERY_TIMEOUT:
+        process.env.FUNCTIONS_DISCOVERY_TIMEOUT || "60",
+    },
+  },
 );
 process.exit(result.status ?? 1);

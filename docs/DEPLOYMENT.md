@@ -111,3 +111,9 @@ En SongScan, el propietario ya está creado. En la PWA puede solicitar **Estable
 `npm run deploy:web` publica Hosting y Firestore sin Functions. `npm run deploy` publica esos recursos y específicamente `functions:processSong`.
 
 Las pruebas E2E generan un build con `npm run build:demo`, que utiliza `.env.demo` y fuerza memoria temporal. `build:production` rechaza un entorno marcado como demo. Esto permite ejecutar las pruebas locales aunque exista una configuración Firebase real.
+
+## Detección local de Functions y contenedores
+
+El script de despliegue concede 60 segundos para detectar las funciones antes de publicar. Esto evita el timeout predeterminado de diez segundos observado durante el primer arranque local en Windows. Se puede ajustar mediante `FUNCTIONS_DISCOVERY_TIMEOUT`.
+
+El repositorio `gcf-artifacts` de `us-central1` tiene una política de limpieza de imágenes de contenedor de más de siete días. El código fuente y los commits permanecen en GitHub; esta política se aplica a artefactos de construcción.
