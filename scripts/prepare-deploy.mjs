@@ -5,6 +5,8 @@ import { loadEnv } from "vite";
 
 export function deploymentConfig(directory = process.cwd()) {
   const values = { ...loadEnv("production", directory, ""), ...process.env };
+  if (values.VITE_DEMO_MODE === "true")
+    throw new Error("El modo demo no puede publicarse como producción.");
   const required = [
     "VITE_FIREBASE_API_KEY",
     "VITE_FIREBASE_AUTH_DOMAIN",

@@ -6,6 +6,10 @@ import { afterEach, expect, it, vi } from "vitest";
 // @ts-expect-error Módulo de scripts Node sin declaraciones TypeScript.
 import { deploymentConfig } from "./prepare-deploy.mjs";
 const directories: string[] = [];
+it("impide publicar un build configurado explícitamente como demo", () => {
+  vi.stubEnv("VITE_DEMO_MODE", "true");
+  expect(() => deploymentConfig(fixture())).toThrow("modo demo");
+});
 afterEach(() => {
   vi.unstubAllEnvs();
   for (const directory of directories.splice(0))

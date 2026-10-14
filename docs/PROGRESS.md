@@ -1,11 +1,11 @@
 # Avance verificado · 2026-10-13
 
-Versión 0.2.0. Código preparado para despliegue Firebase, con builds y verificaciones locales exitosas. El proyecto Firebase nuevo está creado y preparado parcialmente; la publicación y las pruebas del flujo real siguen pendientes de completar facturación, propietario y secreto IA. Consulta `FIREBASE_SETUP.md`.
+Versión 0.2.0. PWA publicada en Firebase Hosting con facturación, propietario, Authentication y reglas configurados. La IA sigue pendiente del secreto OpenAI y despliegue de Functions. La primera sesión y las pruebas autenticadas reales requieren que el propietario establezca su contraseña. Consulta `FIREBASE_SETUP.md`.
 
 ## Verificado localmente
 
 - Compilación TypeScript del frontend y backend; generación de manifest, iconos y service worker.
-- Seis pruebas de frontend/configuración: filtro de acordes, aislamiento de sesión y validación de configuración de producción.
+- Ocho pruebas de frontend/configuración: filtro de acordes, aislamiento de sesión, recuperación de contraseña y validación de configuración de producción.
 - Ocho pruebas de backend: imágenes, contrato de respuesta IA y límites de consumo.
 - Cinco pruebas de reglas en el emulador Firestore: CRUD del propietario, rechazo de otras cuentas, validación de campos, versiones y contadores privados.
 - Seis pruebas E2E Chromium: biblioteca/exportación, PWA y recorte/giro multipágina en escritorio y viewport móvil.
@@ -29,10 +29,10 @@ Las pruebas del contrato IA usan respuestas controladas y no consumen la API Ope
 
 ## Pendiente del entorno real
 
-- Confirmar propietario/UID y elegir la cuenta de facturación. Project ID, aplicación web, Firestore y App Check ya están preparados.
+- Propietario, UID y facturación configurados; pendiente primera sesión del propietario y validación autenticada.
 - Sesión CLI renovada y comprobada; las reglas iniciales de Firestore ya se desplegaron con acceso denegado.
-- Secreto OpenAI en Secret Manager, facturación y servicios Firebase habilitados.
-- Primer despliegue HTTPS, escaneos reales y sincronización entre dispositivos.
+- Registrar el secreto OpenAI en Secret Manager y desplegar `processSong`; las APIs necesarias ya están habilitadas.
+- Hosting HTTPS y reglas publicados; pendientes escaneos IA reales y sincronización autenticada entre dispositivos.
 - Instalación y cámara física en Android/iOS; validación de Safari.
 
 ## Límites de alcance

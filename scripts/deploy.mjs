@@ -9,7 +9,9 @@ const result = spawnSync(
     "--project",
     values.VITE_FIREBASE_PROJECT_ID,
     "--only",
-    "hosting,firestore,functions",
+    process.argv.includes("--web-only")
+      ? "hosting,firestore"
+      : "hosting,firestore,functions:processSong",
   ],
   { stdio: "inherit", shell: process.platform === "win32" },
 );

@@ -32,7 +32,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-import { auth, cloudEnabled, db, functions } from "./firebase";
+import { auth, cloudEnabled, db, functions, aiEnabled } from "./firebase";
 import { fileToDataUrl, cropAndCompress } from "./image";
 import { removeObviousChordLines } from "./lyrics";
 import type { Crop, Photo, Song } from "./types";
@@ -215,7 +215,7 @@ function Workspace({ user }: { user: User | null }) {
     }
   }
   async function process() {
-    if (!functions) {
+    if (!functions || !aiEnabled) {
       setError(
         "Para utilizar IA debes configurar Firebase y desplegar la función processSong. En modo demostración puedes escribir o pegar una letra manualmente.",
       );
@@ -769,11 +769,15 @@ function Workspace({ user }: { user: User | null }) {
                   </button>
                   <button
                     className="primary"
-                    disabled={busy || !photos.length}
+                    disabled={busy || !photos.length || !aiEnabled}
                     onClick={process}
                   >
                     <Sparkles size={17} />
-                    {busy ? "Procesando…" : "Extraer letra con IA"}
+                    {busy
+                      ? "Procesando…"
+                      : aiEnabled
+                        ? "Extraer letra con IA"
+                        : "Reconocimiento IA no disponible"}
                   </button>
                   <button
                     disabled={busy}
@@ -938,9 +942,7 @@ function Workspace({ user }: { user: User | null }) {
                 </p>
                 <p>
                   <strong>Visión IA:</strong>{" "}
-                  {cloudEnabled
-                    ? "Función processSong (requiere despliegue y secreto)"
-                    : "No disponible en demo"}
+                  {aiEnabled ? "Disponible" : "No disponible"}
                 </p>
                 <p>
                   <strong>Captura:</strong> Navegador / archivos

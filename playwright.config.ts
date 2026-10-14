@@ -6,7 +6,9 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   use: { baseURL: "http://127.0.0.1:4173", trace: "retain-on-failure" },
   webServer: {
-    command: "npm run preview -- --port 4173 --strictPort",
+    command:
+      "npm run build:demo && npm run preview -- --port 4173 --strictPort",
+    timeout: 120000,
     url: "http://127.0.0.1:4173",
     reuseExistingServer: false,
   },

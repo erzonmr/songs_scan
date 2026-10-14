@@ -9,6 +9,7 @@ vi.mock("./firebase", () => ({
   auth: {},
   cloudEnabled: true,
   ownerUid: "owner",
+  googleAuthEnabled: false,
 }));
 vi.mock("firebase/auth", () => ({
   onAuthStateChanged: vi.fn((_auth, listener) => {
@@ -16,12 +17,34 @@ vi.mock("firebase/auth", () => ({
     return vi.fn();
   }),
   signOut: vi.fn(),
+  sendPasswordResetEmail: vi.fn(),
   signInWithEmailAndPassword: vi.fn(),
   signInWithPopup: vi.fn(),
   GoogleAuthProvider: vi.fn(),
 }));
 import { SessionGate } from "./SessionGate";
+import { sendPasswordResetEmail } from "firebase/auth";
 afterEach(cleanup);
+it("solicita recuperación únicamente tras pulsar el botón y no ofrece Google sin configurar", async () => {
+  const { default: userEvent } = await import("@testing-library/user-event");
+  vi.mocked(sendPasswordResetEmail).mockClear();
+  const user = userEvent.setup();
+  render(<SessionGate>{() => <PrivateWorkspace />}</SessionGate>);
+  act(() => state.listener?.(null));
+  expect(sendPasswordResetEmail).not.toHaveBeenCalled();
+  expect(
+    screen.queryByRole("button", { name: "Continuar con Google" }),
+  ).toBeNull();
+  await user.type(
+    screen.getByLabelText("Correo electrónico"),
+    "owner@example.com",
+  );
+  await user.click(
+    screen.getByRole("button", { name: "Establecer o restablecer contraseña" }),
+  );
+  expect(sendPasswordResetEmail).toHaveBeenCalledWith({}, "owner@example.com");
+  expect(await screen.findByRole("status")).toBeTruthy();
+});
 function PrivateWorkspace() {
   const [draft, setDraft] = useState("");
   return (

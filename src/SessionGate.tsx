@@ -5,10 +5,11 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  sendPasswordResetEmail,
   type User,
 } from "firebase/auth";
 import { BookOpen } from "lucide-react";
-import { auth, cloudEnabled, ownerUid } from "./firebase";
+import { auth, cloudEnabled, ownerUid, googleAuthEnabled } from "./firebase";
 
 export function SessionGate({
   children,
@@ -65,6 +66,31 @@ function Login() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  async function resetPassword() {
+    if (!auth) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError(
+        "Escribe tu correo para establecer o restablecer la contraseña.",
+      );
+      return;
+    }
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+      setNotice(
+        "Si el correo tiene una cuenta, recibirás un enlace para establecer tu contraseña. Revisa también la carpeta de spam.",
+      );
+    } catch {
+      setError(
+        "No se pudo solicitar el enlace. Vuelve a intentarlo más tarde.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
   async function login(google = false) {
     if (!auth) return;
     setBusy(true);
@@ -120,14 +146,32 @@ function Login() {
         </form>
         <button
           disabled={busy}
-          className="secondary full"
-          onClick={() => void login(true)}
+          className="text-button"
+          onClick={() => void resetPassword()}
         >
-          Continuar con Google
+          Establecer o restablecer contraseña
         </button>
+        <p>
+          En tu primer acceso, escribe el correo del propietario y solicita el
+          enlace para establecer tu contraseña.
+        </p>
+        {googleAuthEnabled && (
+          <button
+            disabled={busy}
+            className="secondary full"
+            onClick={() => void login(true)}
+          >
+            Continuar con Google
+          </button>
+        )}
         {error && (
           <div className="error" role="alert">
             {error}
+          </div>
+        )}
+        {notice && (
+          <div className="notice" role="status">
+            {notice}
           </div>
         )}
         <small>El acceso está limitado al propietario autorizado.</small>

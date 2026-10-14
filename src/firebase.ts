@@ -17,10 +17,14 @@ const config = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
 };
-export const cloudEnabled = Boolean(
-  config.apiKey && config.projectId && config.appId,
-);
+export const cloudEnabled =
+  import.meta.env.VITE_DEMO_MODE !== "true" &&
+  Boolean(config.apiKey && config.projectId && config.appId);
 export const ownerUid = import.meta.env.VITE_OWNER_UID || "";
+export const aiEnabled =
+  cloudEnabled && import.meta.env.VITE_AI_ENABLED === "true";
+export const googleAuthEnabled =
+  import.meta.env.VITE_GOOGLE_AUTH_ENABLED === "true";
 export const firebaseApp: FirebaseApp | null = cloudEnabled
   ? (getApps()[0] ?? initializeApp(config))
   : null;

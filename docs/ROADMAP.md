@@ -15,10 +15,12 @@
 
 - [x] Crear proyecto Firebase separado, registrar aplicación web y obtener configuración.
 - [x] Crear Firestore y desplegar reglas iniciales cerradas; configurar App Check Enterprise.
-- [ ] Confirmar propietario y completar su UID.
-- [ ] Habilitar servicios/facturación, reCAPTCHA Enterprise y secreto OpenAI.
+- [x] Confirmar propietario, crear su cuenta y configurar su UID.
+- [x] Vincular facturación y habilitar APIs de Functions.
+- [ ] Registrar el secreto OpenAI y desplegar `processSong`.
 - [x] Renovar sesión CLI y comprobar creación/despliegue de recursos.
-- [ ] Ejecutar ensayo y despliegue final de Functions/Hosting.
+- [x] Publicar Hosting y reglas definitivas del propietario.
+- [ ] Completar primera sesión del propietario y despliegue de IA.
 - [ ] Validar transcripción con canciones reales, ilegibles y varias páginas.
 - [ ] Validar biblioteca entre dispositivos y conflictos de edición.
 - [ ] Verificar instalación/cámara en Android y Safari iOS.

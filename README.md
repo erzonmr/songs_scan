@@ -2,7 +2,7 @@
 
 Versión 0.2.0. React + TypeScript + Vite, Firebase Authentication/Firestore/Functions y OpenAI Responses API. Fotografía hasta tres páginas, recorta y gira cada una, transcribe sin acordes, revisa y guarda la letra en una biblioteca privada.
 
-El código compila y dispone de pruebas automatizadas de sesión, backend, permisos y navegador. El despliegue real requiere un proyecto Firebase y su configuración. Sin variables Firebase funciona una demo en memoria: sus canciones se pierden al recargar y no hay IA.
+La PWA está publicada en https://songscan-erzonmr.web.app con biblioteca privada y edición manual. El reconocimiento IA sigue pendiente del secreto OpenAI. El código compila y dispone de pruebas automatizadas de sesión, backend, permisos y navegador. Sin variables Firebase funciona una demo en memoria: sus canciones se pierden al recargar y no hay IA.
 
 ## Requisitos
 
@@ -22,7 +22,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-`npm run check` ejecuta pruebas de frontend/configuración, build PWA y pruebas/compilación del backend. Las pruebas de navegador usan el build de `dist`; ejecuta `npm run build` antes de ellas. `npm audit` y `npm audit --prefix functions` revisan las dependencias de cada paquete.
+`npm run check` ejecuta pruebas de frontend/configuración, build PWA y pruebas/compilación del backend. Las pruebas de navegador generan su propio build de demo aislado; no utilizan las credenciales de producción locales. `npm audit` y `npm audit --prefix functions` revisan las dependencias de cada paquete.
 
 ## Explorar la demo
 
@@ -42,7 +42,7 @@ npm run build:production
 npm run deploy
 ```
 
-El despliegue valida las variables, utiliza el Project ID configurado, genera reglas privadas para ese propietario y sincroniza `OWNER_UID` con Functions. Los hooks recompilan antes de publicar. Si falta configuración, se detiene; el build de demo se reserva para desarrollo y pruebas.
+El despliegue valida las variables, utiliza el Project ID configurado, genera reglas privadas para ese propietario y sincroniza `OWNER_UID` con Functions. `npm run deploy:web` publica solo Hosting y Firestore. Activa `VITE_AI_ENABLED=true` únicamente al completar el secreto y despliegue de `processSong`. Los hooks recompilan antes de publicar. Si falta configuración, se detiene; el build de demo se reserva para desarrollo y pruebas.
 
 También se incluye un workflow manual **Desplegar Firebase**, configurable con variables y una credencial del entorno GitHub `production`.
 

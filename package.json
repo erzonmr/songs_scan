@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
+    "build:demo": "tsc --noEmit && vite build --mode demo",
     "build:production": "node scripts/prepare-deploy.mjs && npm run build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
@@ -16,6 +17,7 @@
     "test:e2e": "playwright test",
     "check": "npm test && npm run build && npm --prefix functions test && npm --prefix functions run build",
     "deploy": "node scripts/deploy.mjs",
+    "deploy:web": "node scripts/deploy.mjs --web-only",
     "format": "prettier --write src functions/src scripts tests *.json *.ts .github/workflows/*.yml"
   },
   "dependencies": {

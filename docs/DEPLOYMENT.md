@@ -101,3 +101,13 @@ El workflow `Validar PWA` comprueba builds, pruebas, auditorías, reglas con emu
 - **resource-exhausted:** se agotó la cuota horaria/diaria o no han pasado diez segundos. Los contadores usan UTC.
 
 Referencias oficiales: [App Check web](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider), [App Check Functions](https://firebase.google.com/docs/app-check/cloud-functions), [validación de campos Firestore](https://firebase.google.com/docs/firestore/security/rules-fields) y [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
+
+## Acceso inicial y opciones de publicación
+
+En SongScan, el propietario ya está creado. En la PWA puede solicitar **Establecer o restablecer contraseña** para elegirla personalmente. El agente no asignó una contraseña conocida ni envió correos de recuperación durante la preparación. Google Sign-In solo se muestra si `VITE_GOOGLE_AUTH_ENABLED=true` y requiere configurar su proveedor OAuth.
+
+`VITE_AI_ENABLED=true` activa el botón de transcripción; mantenlo en `false` hasta registrar el secreto y desplegar la función. El workflow de despliegue admite ambas variables como variables del entorno GitHub `production`.
+
+`npm run deploy:web` publica Hosting y Firestore sin Functions. `npm run deploy` publica esos recursos y específicamente `functions:processSong`.
+
+Las pruebas E2E generan un build con `npm run build:demo`, que utiliza `.env.demo` y fuerza memoria temporal. `build:production` rechaza un entorno marcado como demo. Esto permite ejecutar las pruebas locales aunque exista una configuración Firebase real.
