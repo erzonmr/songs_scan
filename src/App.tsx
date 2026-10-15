@@ -12,7 +12,6 @@ import {
   Scissors,
   Search,
   Settings2,
-  Sparkles,
   Trash2,
   Upload,
   ArrowLeft,
@@ -31,8 +30,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
-import { auth, cloudEnabled, db, functions, aiEnabled } from "./firebase";
+import { auth, cloudEnabled, db } from "./firebase";
 import { fileToDataUrl, cropAndCompress } from "./image";
 import { removeObviousChordLines } from "./lyrics";
 import type { Crop, Photo, Song } from "./types";
@@ -214,37 +212,8 @@ function Workspace({ user }: { user: User | null }) {
       setBusy(false);
     }
   }
-  async function process() {
-    if (!functions || !aiEnabled) {
-      setError(
-        "Para utilizar IA debes configurar Firebase y desplegar la función processSong. En modo demostración puedes escribir o pegar una letra manualmente.",
-      );
-      return;
-    }
-    setBusy(true);
-    setError("");
-    setNotice("");
-    try {
-      const imgs = prepared.length
-        ? prepared
-        : await Promise.all(
-            photos.map((p) => cropAndCompress(p.dataUrl, p.crop, p.rotation)),
-          );
-      const callable = httpsCallable<
-        { images: string[] },
-        { title: string; content: string; warnings: string[] }
-      >(functions, "processSong", { timeout: 120000 });
-      const result = await callable({ images: imgs });
-      setTitle(result.data.title);
-      setContent(result.data.content);
-      setWarnings(result.data.warnings || []);
-      setPrepared(imgs);
-      setPage("edit");
-    } catch (e) {
-      alertError(e);
-    } finally {
-      setBusy(false);
-    }
+  function continueToEdit() {
+    setPage("edit");
   }
   function newManual() {
     resetForm();
@@ -758,7 +727,7 @@ function Workspace({ user }: { user: User | null }) {
                 </section>
               </div>
               <section className="panel bottom-panel">
-                <h2>3. Procesamiento</h2>
+                <h2>3. Transcripción y edición</h2>
                 <div className="row actions">
                   <button
                     className="secondary"
@@ -769,22 +738,17 @@ function Workspace({ user }: { user: User | null }) {
                   </button>
                   <button
                     className="primary"
-                    disabled={busy || !photos.length || !aiEnabled}
-                    onClick={process}
+                    disabled={busy || !photos.length}
+                    onClick={continueToEdit}
                   >
-                    <Sparkles size={17} />
-                    {busy
-                      ? "Procesando…"
-                      : aiEnabled
-                        ? "Extraer letra con IA"
-                        : "Reconocimiento IA no disponible"}
+                    <FilePenLine size={17} /> Transcribir con imagen de guía
                   </button>
                   <button
                     disabled={busy}
                     className="text-button"
                     onClick={newManual}
                   >
-                    Escribir letra manualmente
+                    Escribir letra en blanco
                   </button>
                 </div>
                 {prepared.length > 0 && (
@@ -939,10 +903,6 @@ function Workspace({ user }: { user: User | null }) {
                   {cloudEnabled
                     ? "Firestore, sin persistencia de canciones en disco local"
                     : "Solo memoria RAM, se pierde al actualizar"}
-                </p>
-                <p>
-                  <strong>Visión IA:</strong>{" "}
-                  {aiEnabled ? "Disponible" : "No disponible"}
                 </p>
                 <p>
                   <strong>Captura:</strong> Navegador / archivos

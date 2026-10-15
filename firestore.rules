@@ -1,8 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
  match /databases/{database}/documents {
-  // Plantilla cerrada por defecto; prepare-deploy genera las reglas con el UID real.
-  function owner() { return request.auth != null && request.auth.uid == '__OWNER_UID__'; }
+  function owner() { return request.auth != null && request.auth.uid == 'OiMexYZDZ7g2T3YD5MK6rurEQ8k1'; }
   function validSong() {
    let data = request.resource.data;
    return data.keys().hasAll(['title','content','favorite','category','createdAt','updatedAt','version'])

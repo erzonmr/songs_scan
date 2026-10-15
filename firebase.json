@@ -2,7 +2,7 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "predeploy": ["npm run build:production"],
+    "predeploy": ["npm run build"],
     "rewrites": [{ "source": "**", "destination": "/index.html" }],
     "headers": [
       {
@@ -44,19 +44,7 @@
     ]
   },
   "firestore": {
-    "rules": ".firebase/firestore.rules",
-    "indexes": "firestore.indexes.json",
-    "predeploy": ["node scripts/prepare-deploy.mjs"]
-  },
-  "storage": { "rules": "storage.rules" },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "predeploy": [
-        "node scripts/prepare-deploy.mjs",
-        "npm --prefix functions run build"
-      ]
-    }
-  ]
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
 }
